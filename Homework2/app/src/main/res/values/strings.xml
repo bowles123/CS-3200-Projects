@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Network Picture Downloader</string>
+    <string name="dyers_btn">DYERS</string>
+    <string name="moon_pine_btn">MOON PINE</string>
+    <string name="plum_estate_btn">PLUM ESTATE</string>
+    <string name="ushimachi_btn">USHIMACHI</string>
+</resources>

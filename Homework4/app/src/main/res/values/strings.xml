@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Creating &amp; Deleting Fragments</string>
+    <string name="add_fragment">Add Fragment</string>
+    <string name="delete_fragment">Delete Fragment</string>
+</resources>

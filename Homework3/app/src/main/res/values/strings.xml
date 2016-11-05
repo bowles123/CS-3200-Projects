@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Remote Multifeed Camera Simulator</string>
+    <string name="camera1">Camera 1</string>
+    <string name="camera2">Camera 2</string>
+</resources>
