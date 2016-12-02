@@ -1,9 +1,6 @@
 package com.example.giftexchanger.Exchanger.Utils;
 
-import android.os.Environment;
-
 import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,18 +10,21 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by User on 12/1/2016.
  */
 
 public class JSONHelper {
-    private static final String FILE_NAME = "PreviousParticipants.txt";
-    private static final File FILE_PATH = Environment.getExternalStorageDirectory();
+    private static final String FILE_NAME = "PreviousParticipants.json";
+    public static File FILE_PATH;
+    private static Map<String, Map<String, String>> previous;
     private static final Gson GSON = new Gson();
+    private static final int MAX_MAP_SIZE = 3;
 
-    public static HashMap<String, HashMap<String, String>> ReadInPrevious() {
-        HashMap<String, HashMap<String, String>> map = null;
+    public static Map<String, Map<String, String>> ReadInPrevious() {
+        Map<String, Map<String, String>> map = null;
 
         try {
             String line, jsonString = "";
@@ -34,20 +34,26 @@ public class JSONHelper {
             while ((line = bufferedReader.readLine()) != null) {
                 jsonString += line;
             }
-            map = GSON.fromJson(jsonString, HashMap.class);
+            map = GSON.fromJson(jsonString, Map.class);
         } catch(FileNotFoundException e) {
             e.printStackTrace();
         } catch(IOException e) {
             e.printStackTrace();
         }
 
+        previous = map;
         return map;
     }
 
     public static boolean WriteOutAssignments(ArrayList<String> assigns, int year) {
-        HashMap<String, HashMap<String, String>> finalMap = new HashMap<>();
         HashMap<String, String> assignments = new HashMap<>();
         FileWriter fileWriter;
+
+        if (previous == null) {
+            previous = new HashMap<>();
+        } else if (previous.size() == MAX_MAP_SIZE) {
+            previous.remove(year - MAX_MAP_SIZE);
+        }
 
         for (String assign : assigns) {
             String[] people = assign.split(" -> ");
@@ -55,11 +61,11 @@ public class JSONHelper {
             assignments.put(people[0], people[1]);
         }
 
-        finalMap.put(Integer.toString(year), assignments);
-        String jsonString = GSON.toJson(assignments);
+        previous.put(Integer.toString(year), assignments);
+        String jsonString = GSON.toJson(previous);
 
         try {
-            fileWriter = new FileWriter(FILE_PATH + "/" + FILE_NAME, true);
+            fileWriter = new FileWriter(FILE_PATH + "/" + FILE_NAME);
             fileWriter.write(jsonString);
             fileWriter.close();
             return true;

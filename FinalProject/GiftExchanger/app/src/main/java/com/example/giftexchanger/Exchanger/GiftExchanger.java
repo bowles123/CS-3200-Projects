@@ -4,7 +4,7 @@ import com.example.giftexchanger.Exchanger.Utils.JSONHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -16,7 +16,10 @@ public class GiftExchanger {
     private ArrayList<String> assignments;
     private int numParticipants;
     private int year;
-    private HashMap<String, HashMap<String, String>> previousAssignments;
+    private Map<String, Map<String, String>> previousAssignments;
+
+    private void saveAssignments() { JSONHelper.WriteOutAssignments(assignments, year); }
+    private void getPreviousAssignments() { previousAssignments = JSONHelper.ReadInPrevious(); }
 
     public ArrayList<String> getParticipants() { return participants; }
     public int getNumParticipants() { return numParticipants; }
@@ -46,7 +49,7 @@ public class GiftExchanger {
     private void assign(ArrayList<String> people) {
         int done = 0;
         String one, two;
-        ArrayList<String> tempParticipants = new ArrayList<>(participants);
+        //ArrayList<String> tempParticipants = new ArrayList<>(participants);
 
         while(participants.size() > 0 && done <= numParticipants) {
             one = participants.get(0);
@@ -69,7 +72,7 @@ public class GiftExchanger {
 
     private boolean checkValid(String person1, String person2) {
         int yearAgo = year - 1, twoAgo = year - 2, threeAgo = year - 3;
-        HashMap<String, String> last = previousAssignments.get(yearAgo), two = previousAssignments.get(twoAgo),
+        Map<String, String> last = previousAssignments.get(yearAgo), two = previousAssignments.get(twoAgo),
                 three = previousAssignments.get(threeAgo);
 
         if ((last == null || last.get(person1) != person2) && (two == null || two.get(person1) != person2)
@@ -96,13 +99,5 @@ public class GiftExchanger {
 
         saveAssignments();
         return exchanges;
-    }
-
-    private void saveAssignments() {
-        JSONHelper.WriteOutAssignments(assignments, year);
-    }
-
-    private void getPreviousAssignments() {
-        previousAssignments = JSONHelper.ReadInPrevious();
     }
 }
