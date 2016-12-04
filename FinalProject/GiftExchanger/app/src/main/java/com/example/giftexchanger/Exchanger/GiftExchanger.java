@@ -21,6 +21,7 @@ public class GiftExchanger {
     private void saveAssignments() { JSONHelper.WriteOutAssignments(assignments, year); }
     private void getPreviousAssignments() { previousAssignments = JSONHelper.ReadInPrevious(); }
 
+    public Map<String, Map<String, String>> getPrevious() { return previousAssignments; }
     public ArrayList<String> getParticipants() { return participants; }
     public int getNumParticipants() { return numParticipants; }
     public int getYear() { return year; }
@@ -49,7 +50,7 @@ public class GiftExchanger {
     private void assign(ArrayList<String> people) {
         int done = 0;
         String one, two;
-        //ArrayList<String> tempParticipants = new ArrayList<>(participants);
+        ArrayList<String> tempParticipants = new ArrayList<>(participants);
 
         while(participants.size() > 0 && done <= numParticipants) {
             one = participants.get(0);
@@ -66,7 +67,17 @@ public class GiftExchanger {
             assignments.add(one + " -> " + two + ".");
             done++;
 
-            // check that each assignment is valid. (if participants.size() == 0)
+            if (participants.size() == 0) {
+                for (String assignment : assignments) {
+                    String[] ppl = assignment.split(" -> ");
+                    if (!checkValid(ppl[0], ppl[2].split(".")[0])) {
+                        participants = new ArrayList<>(tempParticipants);
+                        assignments = new ArrayList<>();
+                        done = 0;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -75,8 +86,8 @@ public class GiftExchanger {
         Map<String, String> last = previousAssignments.get(yearAgo), two = previousAssignments.get(twoAgo),
                 three = previousAssignments.get(threeAgo);
 
-        if ((last == null || last.get(person1) != person2) && (two == null || two.get(person1) != person2)
-                && (three == null || three.get(person1) != person2)) {
+        if ((last == null || !last.get(person1).equals(person2)) && (two == null || !two.get(person1).equals(person2))
+                && (three == null || !three.get(person1).equals(person2))) {
             return true;
         }
         return false;

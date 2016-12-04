@@ -2,10 +2,12 @@ package com.example.giftexchanger;
 
 import com.example.giftexchanger.Exchanger.Utils.JSONHelper;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +16,11 @@ import static org.junit.Assert.*;
  */
 
 public class JSONHelperTests {
+    @Before
+    public void setup() {
+        JSONHelper.FILE_PATH = new File("C:/Users/User/Documents/CS 3200/GiftExchanger");
+    }
+
     @Test
     public void saveAssignmentsTest() {
         ArrayList<String> assignments = new ArrayList<>();
@@ -26,8 +33,8 @@ public class JSONHelperTests {
 
     @Test
     public void getPreviousAssignmentsTest() {
-        HashMap<String, HashMap<String, String>> previousAssignments = JSONHelper.ReadInPrevious();
-        HashMap<String, String> assignments;
+        Map<String, Map<String, String>> previousAssignments = JSONHelper.ReadInPrevious();
+        Map<String, String> assignments;
 
         assertNotNull(previousAssignments);
         assertEquals(1, previousAssignments.size());
