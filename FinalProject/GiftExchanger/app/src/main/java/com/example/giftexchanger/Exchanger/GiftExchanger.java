@@ -70,7 +70,7 @@ public class GiftExchanger {
             if (participants.size() == 0) {
                 for (String assignment : assignments) {
                     String[] ppl = assignment.split(" -> ");
-                    if (!checkValid(ppl[0], ppl[2].split(".")[0])) {
+                    if (!checkValid(ppl[0], ppl[1].replace(".", ""))) {
                         participants = new ArrayList<>(tempParticipants);
                         assignments = new ArrayList<>();
                         done = 0;
@@ -82,6 +82,8 @@ public class GiftExchanger {
     }
 
     private boolean checkValid(String person1, String person2) {
+        if (previousAssignments == null) return true;
+
         int yearAgo = year - 1, twoAgo = year - 2, threeAgo = year - 3;
         Map<String, String> last = previousAssignments.get(yearAgo), two = previousAssignments.get(twoAgo),
                 three = previousAssignments.get(threeAgo);

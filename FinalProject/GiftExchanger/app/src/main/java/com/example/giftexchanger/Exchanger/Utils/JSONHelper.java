@@ -1,5 +1,7 @@
 package com.example.giftexchanger.Exchanger.Utils;
 
+import android.os.Environment;
+
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,7 +20,7 @@ import java.util.Map;
 
 public class JSONHelper {
     private static final String FILE_NAME = "PreviousParticipants.json";
-    public static File FILE_PATH;
+    public static File FILE_PATH = Environment.getExternalStorageDirectory();
     private static Map<String, Map<String, String>> previous;
     private static final Gson GSON = new Gson();
     private static final int MAX_MAP_SIZE = 3;
